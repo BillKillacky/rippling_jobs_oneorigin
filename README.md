@@ -15,11 +15,11 @@ Webscrape the rippling OneOrigin job postings and create a json object file to r
 * pip install beautifulsoup4
 * **(but the requirements.txt has the python modules needed)**
 
-## Logic to consider when things break - These value can be replaced when rippling changes these values
+## Logic to consider when things break - These values can be replaced in `rip_jobs.py` when rippling changes the html code.
 
 * **Find all top-level sections (group of jobs)**
 * sections = soup.select('`.css-oxhdrx`')
-* **With each section find individual job information**
+* **Within each section find individual job information**
 * job_blocks = section.select('`.css-cq05mv`')
 * currently the OneOrigin mission statement is separated from the job description by `#LI-Onsite`. When this changes the results will vary.
 * anticipated work_modes = ['`#LI-Onsite`', '`#LI-Remote`', '`#LI-Hybrid`']
