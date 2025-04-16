@@ -8,7 +8,29 @@ Webscrape the rippling OneOrigin job postings and create a json object file to r
 * using Python and BeautifulSoup4 webscraping logic to collect the job information
 * Create a json file that Shashank can use to update the oneorigin.us site with fresh job postings
 
-## Installation
+## Setup
+
+* **On your local, create a data directory in your project folder (or Docker Compose will create it for you):**
+* **for example: (use the your own base directory with a subfolder 'data')**
+* mkdir -p /Users/billkillacky/Dev/rip_jobs_webscrape/data
+* **Run your container using Docker Compose: (from your base directory)**
+* cd /Users/billkillacky/Dev/rip_jobs_webscrape
+* docker-compose up 
+* **To run it in the background:**
+* docker-compose up -d
+* **To rebuild if you make changes:**
+* docker-compose up --build
+* docker compose up
+* **With this setup, the data written in your Python script to /app/data**
+* **will appear in the data subdirectory of your project folder**
+* **(/Users/billkillacky/Dev/rip_jobs_webscrape/data on your local machine).**
+* ~
+* **confirm the tag was used**
+* docker images
+* docker ps
+
+
+## Original Installation
 
 * Python 3.13.1
 * pip install requests

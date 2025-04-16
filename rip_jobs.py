@@ -4,6 +4,41 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import re
+import os
+
+# docker considerations:
+# 1. The script is designed to run in a Docker container.
+# 2. The script uses the requests library to fetch web pages and BeautifulSoup to parse HTML.
+# 3. The script saves job data to a JSON file in a specified directory.
+
+# Define data directory path for persistence
+DATA_DIR = '/app/data'
+
+# Ensure the data directory exists
+os.makedirs(DATA_DIR, exist_ok=True)
+
+# Function to get the full path for a file in the data directory
+def get_data_path(filename):
+    return os.path.join(DATA_DIR, filename)
+
+# Writing data to persistent storage
+def save_jobs(jobs):
+    with open(get_data_path('rippling_jobs.json'), 'w') as f:
+        json.dump(jobs, f, indent=4)
+
+# Reading data from persistent storage
+def load_jobs():
+    try:
+        with open(get_data_path('rippling_jobs.json'), 'r') as file:
+            return json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+# Example for saving full jobs list
+def save_full_jobs(full_jobs_list):
+    with open(get_data_path('rippling_jobs_full.json'), 'w') as f:
+        json.dump(full_jobs_list, f, indent=4)
+
 
 def main():
     process_rippling_jobs()
@@ -16,8 +51,9 @@ def get_job_description():
     work_modes = ['#LI-Onsite', '#LI-Remote', '#LI-Hybrid']
 
     # Load JSON data from file
-    with open('rippling_jobs.json', 'r') as file:
-        jobs_data = json.load(file)
+    jobs_data = load_jobs()
+    # with open('rippling_jobs.json', 'r') as file:
+    #     jobs_data = json.load(file)
 
     # Loop through each job entry
     for job in jobs_data:
@@ -91,7 +127,7 @@ def get_job_description():
 
                     full_jobs_list.append(full_jobs_dict)
                     print(f"Full Job dict:\n{json.dumps(full_jobs_dict, indent=4)}\n")
-                    print("\n" + "-"*80 + "\n")
+                    print("\n" + "-"*50 + "\n")
 
                 else:
                     print(f"Could not find job description on page: {job_url}")
@@ -99,9 +135,12 @@ def get_job_description():
                 print(f"Failed to fetch {job_url}: {e}")
         else:
             print("No job_link found in entry.")
+    
     # write the jobs to a JSON file
-    with open('rippling_jobs_full.json', 'w') as f:
-        json.dump(full_jobs_list, f, indent=4)
+    save_full_jobs(full_jobs_list)
+    # with open('rippling_jobs_full.json', 'w') as f:
+    #     json.dump(full_jobs_list, f, indent=4)
+    
     print(f"Total jobs found: {len(full_jobs_list)}\n")
 
 
@@ -181,8 +220,9 @@ def process_rippling_jobs():
     print(json.dumps(jobs, indent=4))
 
     # write the jobs to a JSON file
-    with open('rippling_jobs.json', 'w') as f:
-        json.dump(jobs, f, indent=4)
+    save_jobs(jobs)
+    # with open('rippling_jobs.json', 'w') as f:
+    #     json.dump(jobs, f, indent=4)
     print(f"Total jobs found: {len(jobs)}\n")
 
 

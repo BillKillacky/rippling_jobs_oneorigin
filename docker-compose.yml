@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  rip_jobs_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rip_jobs_image:latest
+    container_name: rip_jobs_container
+    volumes:
+      - /Users/billkillacky/Dev/rip_jobs_webscrape/data:/app/data
+    # Uncomment below if you want to keep the container running
+    # tty: true
+    # stdin_open: true
