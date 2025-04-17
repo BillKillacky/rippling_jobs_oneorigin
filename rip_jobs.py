@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import json
 import re
 import os
+import unicodedata
 
 # docker considerations:
 # 1. The script is designed to run in a Docker container.
@@ -49,6 +50,15 @@ def get_job_description():
 
     full_jobs_list = []
     work_modes = ['#LI-Onsite', '#LI-Remote', '#LI-Hybrid']
+    fancy_quotes = {
+        "’": "'",
+        "‘": "'",
+        "“": '"',
+        "”": '"',
+        "—": "-",
+        "–": "-",
+        "…": "...",
+    }
 
     # Load JSON data from file
     jobs_data = load_jobs()
@@ -82,6 +92,11 @@ def get_job_description():
                 if job_div:
                     full_text = job_div.get_text(separator="\n", strip=True)
 
+                    # Remove unwanted characters
+                    full_text = unicodedata.normalize("NFKD", full_text)
+                    for fancy, plain in fancy_quotes.items():
+                        full_text = full_text.replace(fancy, plain)
+
                     # Find all matching substrings
                     matches = [sub for sub in work_modes if sub in full_text]
 
@@ -113,12 +128,9 @@ def get_job_description():
                     # if work_mode:
                     #     job_desc = f"Work mode: {work_mode}\n{job_desc}"
 
-                    job_desc = job_desc[:350] + " ..." 
-                    job_desc = job_desc.encode('ascii', 'ignore').decode()  # Remove non-ASCII (like curly apostrophes)
-                    job_desc = job_desc.strip()                         # Remove leading/trailing whitespace
-                    
-                    oneorigin_mission = oneorigin_mission.encode('ascii', 'ignore').decode()  # Remove non-ASCII (like curly apostrophes)
-                    oneorigin_mission = oneorigin_mission.strip()                         # Remove leading/trailing whitespace
+                    job_desc = job_desc[:350] + " ..." # Truncate to 350 characters
+                    job_desc = job_desc.strip()        # Remove leading/trailing whitespace
+                    oneorigin_mission = oneorigin_mission.strip()                         
 
                     full_jobs_dict['job_desc'] = job_desc
                     full_jobs_dict['oneorigin_mission'] = oneorigin_mission
