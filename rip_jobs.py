@@ -6,6 +6,7 @@ import json
 import re
 import os
 import unicodedata
+import argparse
 
 # docker considerations:
 # 1. The script is designed to run in a Docker container.
@@ -17,6 +18,18 @@ DATA_DIR = '/app/data'
 
 # Ensure the data directory exists
 os.makedirs(DATA_DIR, exist_ok=True)
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--sections')
+parser.add_argument('--job_blocks')
+args = parser.parse_args()
+
+print("."*50)
+print("Command Line Arguments:\n")
+print(f"Sections  : '{args.sections}'")
+print(f"Job Blocks: '{args.job_blocks}'")
+print("."*50)
+print()
 
 # Function to get the full path for a file in the data directory
 def get_data_path(filename):
@@ -187,7 +200,8 @@ def process_rippling_jobs():
     jobs = []
 
     # Find all top-level sections (group of jobs)
-    sections = soup.select('.css-oxhdrx')
+    # sections = soup.select('.css-oxhdrx')
+    sections = soup.select(f'.{args.sections}')
 
     for section in sections:
         # Optional: Get the general department name from section's <h3>
@@ -195,7 +209,8 @@ def process_rippling_jobs():
         section_department = section_heading.get_text(strip=True) if section_heading else None
 
         # Find all job blocks in this section
-        job_blocks = section.select('.css-aapqz6')
+        # job_blocks = section.select('.css-aapqz6')
+        job_blocks = section.select(f'.{args.job_blocks}')
 
         for job_block in job_blocks:
             job_link_tag = job_block.find('a', href=True)

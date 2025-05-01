@@ -40,14 +40,20 @@ Webscrape the rippling OneOrigin job postings and create a json object file to r
 ## Logic to consider when things break - These values can be replaced in `rip_jobs.py` when rippling changes the html code.
 
 * **Find all top-level sections (group of jobs)**
-* sections = soup.select('`.css-oxhdrx`')
+* sections = soup.select('`.css-oxhdrx`')  (see usage below)
 * **Within each section find individual job information**
 * ~~job_blocks = section.select('`.css-cq05mv`')~~
-* job_blocks = section.select('`.css-aapqz6`')
+* job_blocks = section.select('`.css-aapqz6`') (see usage below)
 * currently the OneOrigin mission statement is separated from the job description by `#LI-Onsite`. When this changes the results will vary.
 * anticipated work_modes = ['`#LI-Onsite`', '`#LI-Remote`', '`#LI-Hybrid`']
 
 ![20250501 job_block html changed from css-cq05mv to css-aapqz6](./images/20250501-rip_jobs.png)
+
 ## Usage
 
-No arguments are used. Just run the rip_jobs.py code
+* Command Line Arguments are now used to pass the sections and job_blocks values.
+* docker-compose.yml contains: 
+* command: ["python", "rip_jobs.py", "--sections", "css-oxhdrx", "--job_blocks", "css-aapqz6"] 
+* 
+* When the webscraping fails due to new css values:
+* update docker-compose.yml to change the command values for --sections or --job_blocks 
