@@ -195,7 +195,7 @@ def process_rippling_jobs():
         section_department = section_heading.get_text(strip=True) if section_heading else None
 
         # Find all job blocks in this section
-        job_blocks = section.select('.css-cq05mv')
+        job_blocks = section.select('.css-aapqz6')
 
         for job_block in job_blocks:
             job_link_tag = job_block.find('a', href=True)
