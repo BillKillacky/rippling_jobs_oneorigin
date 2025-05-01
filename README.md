@@ -42,10 +42,12 @@ Webscrape the rippling OneOrigin job postings and create a json object file to r
 * **Find all top-level sections (group of jobs)**
 * sections = soup.select('`.css-oxhdrx`')
 * **Within each section find individual job information**
-* job_blocks = section.select('`.css-cq05mv`')
+* ~~job_blocks = section.select('`.css-cq05mv`')~~
+* job_blocks = section.select('`.css-aapqz6`')
 * currently the OneOrigin mission statement is separated from the job description by `#LI-Onsite`. When this changes the results will vary.
 * anticipated work_modes = ['`#LI-Onsite`', '`#LI-Remote`', '`#LI-Hybrid`']
 
+![20250501 job_block html changed from css-cq05mv to css-aapqz6](./images/20250501-rip_jobs.png)
 ## Usage
 
 No arguments are used. Just run the rip_jobs.py code
