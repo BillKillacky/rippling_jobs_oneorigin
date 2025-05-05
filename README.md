@@ -57,3 +57,8 @@ Webscrape the rippling OneOrigin job postings and create a json object file to r
 * 
 * When the webscraping fails due to new css values:
 * update docker-compose.yml to change the command values for --sections or --job_blocks 
+* 
+* When bringing into production from github, 
+* edit your local docker-compose.yml:
+* comment out "Bill's local test path" line, and uncomment "Shashank's prod path" line
+![20250505 update from test to prod path](./images/20250505-test-to-prod-path.png)
