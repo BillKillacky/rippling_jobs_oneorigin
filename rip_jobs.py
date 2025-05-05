@@ -15,9 +15,11 @@ import argparse
 
 # Define data directory path for persistence
 DATA_DIR = '/app/data'
+SRC_CONTENT_DIR = '/app/src/content'
 
 # Ensure the data directory exists
 os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(SRC_CONTENT_DIR, exist_ok=True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--sections')
@@ -32,31 +34,70 @@ print("."*50)
 print()
 
 # Function to get the full path for a file in the data directory
-def get_data_path(filename):
-    return os.path.join(DATA_DIR, filename)
+def get_data_path(my_dir, filename):
+    return os.path.join(my_dir, filename)
 
 # Writing data to persistent storage
 def save_jobs(jobs):
-    with open(get_data_path('rippling_jobs.json'), 'w') as f:
+    with open(get_data_path(DATA_DIR, 'rippling_jobs.json'), 'w') as f:
         json.dump(jobs, f, indent=4)
 
 # Reading data from persistent storage
 def load_jobs():
     try:
-        with open(get_data_path('rippling_jobs.json'), 'r') as file:
+        with open(get_data_path(DATA_DIR, 'rippling_jobs.json'), 'r') as file:
             return json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
         return []
 
 # Example for saving full jobs list
 def save_full_jobs(full_jobs_list):
-    with open(get_data_path('rippling_jobs_full.json'), 'w') as f:
+    with open(get_data_path(DATA_DIR, 'rippling_jobs_full.json'), 'w') as f:
         json.dump(full_jobs_list, f, indent=4)
+
+def transform_to_careers_format(full_jobs_list):
+    open_positions = []
+    
+    for job in full_jobs_list:
+        position = {
+            "title": job.get('job_title', ''),
+            "description": job.get('job_desc', ''),
+            "location": job.get('location', ''),
+            "type": "Full-Time",  # Default to Full-Time as per careers.json
+            "level": "Mid-Senior",  # Default to Mid-Senior as per careers.json
+            "link": job.get('job_link', '')
+        }
+        open_positions.append(position)
+    
+    # Create the final structure matching careers.json
+    output = {
+        "openPositions": open_positions
+    }
+    print(json.dumps(output, indent=4))
+    
+    # Save to the target location
+    # target_path = os.path.join('src', 'content', 'openPosition.json')
+    # os.makedirs(os.path.dirname(target_path), exist_ok=True)
+
+    target_path = get_data_path(SRC_CONTENT_DIR, 'openPosition.json')
+    
+    with open(target_path, 'w') as f:
+        json.dump(output, f, indent=4)
+    
+    print(f"\nSuccessfully transformed and saved {len(open_positions)} positions to {target_path}\n")
 
 
 def main():
     process_rippling_jobs()
     get_job_description()
+
+    # Load the full jobs list and transform it
+    try:
+        with open(get_data_path(DATA_DIR, 'rippling_jobs_full.json'), 'r') as f:
+            full_jobs_list = json.load(f)
+            transform_to_careers_format(full_jobs_list)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error loading full jobs list: {e}")
 
 def get_job_description():
     print("Fetching job descriptions...\n")

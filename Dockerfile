@@ -13,6 +13,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Create a directory for persistent data
 RUN mkdir -p /app/data
+RUN mkdir -p /app/src/content
 
 # Copy the Python script
 COPY rip_jobs.py .

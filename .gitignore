@@ -4,9 +4,13 @@ env_rip/
 # Ignore notes file
 notes.txt
 
+# Ignore files starting with shashank_
+shashank_*
+
 # Ignore ny data subdirectory
 data/
 /.DS_Store
+src/content/
 
 # Recommended general Python stuff
 __pycache__/
