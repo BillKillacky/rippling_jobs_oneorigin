@@ -24,12 +24,14 @@ os.makedirs(SRC_CONTENT_DIR, exist_ok=True)
 parser = argparse.ArgumentParser()
 parser.add_argument('--sections')
 parser.add_argument('--job_blocks')
+parser.add_argument('--job_desc_len', type=int, default=350)
 args = parser.parse_args()
 
 print("."*50)
 print("Command Line Arguments:\n")
 print(f"Sections  : '{args.sections}'")
 print(f"Job Blocks: '{args.job_blocks}'")
+print(f"Job Desc Length: {args.job_desc_len}")
 print("."*50)
 print()
 
@@ -182,7 +184,7 @@ def get_job_description():
                     # if work_mode:
                     #     job_desc = f"Work mode: {work_mode}\n{job_desc}"
 
-                    job_desc = job_desc[:350] + " ..." # Truncate to 350 characters
+                    job_desc = job_desc[:args.job_desc_len] + " ..." # Truncate to 350 characters
                     job_desc = job_desc.strip()        # Remove leading/trailing whitespace
                     oneorigin_mission = oneorigin_mission.strip()                         
 

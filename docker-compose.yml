@@ -12,7 +12,7 @@ services:
       - ./src/content:/app/src/content       # Bill's local test path
       #- ../../src/content:/app/src/content  # Shashank's prod path
     
-    command: ["python", "rip_jobs.py", "--sections", "css-oxhdrx", "--job_blocks", "css-aapqz6"]
+    command: ["python", "rip_jobs.py", "--sections", "css-oxhdrx", "--job_blocks", "css-aapqz6", "--job_desc_len", "350"]
     # Uncomment below if you want to keep the container running
     # tty: true
     # stdin_open: true

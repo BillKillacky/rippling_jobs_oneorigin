@@ -53,10 +53,12 @@ Webscrape the rippling OneOrigin job postings and create a json object file to r
 
 * Command Line Arguments are now used to pass the sections and job_blocks values.
 * docker-compose.yml contains: 
-* command: ["python", "rip_jobs.py", "--sections", "css-oxhdrx", "--job_blocks", "css-aapqz6"] 
+* command: ["python", "rip_jobs.py", "--sections", "css-oxhdrx", "--job_blocks", "css-aapqz6", "--job_desc_len", "700"]
 * 
 * When the webscraping fails due to new css values:
 * update docker-compose.yml to change the command values for --sections or --job_blocks 
+
+* When you want to change the length of the job description, change the value for --job_desc_len
 * 
 * When bringing into production from github, 
 * edit your local docker-compose.yml:
